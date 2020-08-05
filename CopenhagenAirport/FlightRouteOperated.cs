@@ -12,11 +12,11 @@ namespace CopenhagenAirport
     using System;
     using System.Collections.Generic;
     
-    public partial class FlightRouteOwned
+    public partial class FlightRouteOperated
     {
         public string OriginAirport { get; set; }
         public string DestAirport { get; set; }
-        public string AirlineOwner { get; set; }
+        public string OperatedBy { get; set; }
     
         public virtual Airline Airline { get; set; }
         public virtual Airport Airport { get; set; }

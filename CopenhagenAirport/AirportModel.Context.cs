@@ -25,8 +25,9 @@ namespace CopenhagenAirport
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Airline> Airlines { get; set; }
         public virtual DbSet<Airport> Airports { get; set; }
-        public virtual DbSet<Company> Companies { get; set; }
+        public virtual DbSet<FlightRouteOperated> FlightRouteOperateds { get; set; }
         public virtual DbSet<FlightRouteOwned> FlightRouteOwneds { get; set; }
     }
 }

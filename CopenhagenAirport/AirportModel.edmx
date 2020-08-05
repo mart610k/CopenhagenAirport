@@ -5,6 +5,12 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="CphAirportModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Airline">
+          <Key>
+            <PropertyRef Name="AirlineName" />
+          </Key>
+          <Property Name="AirlineName" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
         <EntityType Name="Airport">
           <Key>
             <PropertyRef Name="IATA" />
@@ -12,25 +18,39 @@
           <Property Name="IATA" Type="char" MaxLength="3" Nullable="false" />
           <Property Name="AirportName" Type="varchar" MaxLength="128" />
         </EntityType>
-        <EntityType Name="Company">
+        <EntityType Name="FlightRouteOperated">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="OriginAirport" />
+            <PropertyRef Name="DestAirport" />
+            <PropertyRef Name="OperatedBy" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CompanyName" Type="varchar" MaxLength="128" />
+          <Property Name="OriginAirport" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="DestAirport" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="OperatedBy" Type="varchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="FlightRouteOwned">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="OriginAirport" />
+            <PropertyRef Name="DestAirport" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OriginAirport" Type="char" MaxLength="3" />
-          <Property Name="DestAirport" Type="char" MaxLength="3" />
-          <Property Name="OwnerCompany" Type="int" />
-          <Property Name="OperatedBy" Type="int" />
+          <Property Name="OriginAirport" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="DestAirport" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="AirlineOwner" Type="varchar" MaxLength="128" />
         </EntityType>
+        <Association Name="FK__FlightRou__Airli__2A4B4B5E">
+          <End Role="Airline" Type="Self.Airline" Multiplicity="0..1" />
+          <End Role="FlightRouteOwned" Type="Self.FlightRouteOwned" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Airline">
+              <PropertyRef Name="AirlineName" />
+            </Principal>
+            <Dependent Role="FlightRouteOwned">
+              <PropertyRef Name="AirlineOwner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__FlightRou__DestA__29572725">
-          <End Role="Airport" Type="Self.Airport" Multiplicity="0..1" />
+          <End Role="Airport" Type="Self.Airport" Multiplicity="1" />
           <End Role="FlightRouteOwned" Type="Self.FlightRouteOwned" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Airport">
@@ -41,20 +61,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FlightRou__Opera__2B3F6F97">
-          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
-          <End Role="FlightRouteOwned" Type="Self.FlightRouteOwned" Multiplicity="*" />
+        <Association Name="FK__FlightRou__DestA__30F848ED">
+          <End Role="Airport" Type="Self.Airport" Multiplicity="1" />
+          <End Role="FlightRouteOperated" Type="Self.FlightRouteOperated" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Company">
-              <PropertyRef Name="ID" />
+            <Principal Role="Airport">
+              <PropertyRef Name="IATA" />
             </Principal>
-            <Dependent Role="FlightRouteOwned">
+            <Dependent Role="FlightRouteOperated">
+              <PropertyRef Name="DestAirport" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FlightRou__Opera__31EC6D26">
+          <End Role="Airline" Type="Self.Airline" Multiplicity="1" />
+          <End Role="FlightRouteOperated" Type="Self.FlightRouteOperated" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Airline">
+              <PropertyRef Name="AirlineName" />
+            </Principal>
+            <Dependent Role="FlightRouteOperated">
               <PropertyRef Name="OperatedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__FlightRou__Origi__286302EC">
-          <End Role="Airport" Type="Self.Airport" Multiplicity="0..1" />
+          <End Role="Airport" Type="Self.Airport" Multiplicity="1" />
           <End Role="FlightRouteOwned" Type="Self.FlightRouteOwned" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Airport">
@@ -65,37 +97,46 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FlightRou__Owner__2A4B4B5E">
-          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
-          <End Role="FlightRouteOwned" Type="Self.FlightRouteOwned" Multiplicity="*" />
+        <Association Name="FK__FlightRou__Origi__300424B4">
+          <End Role="Airport" Type="Self.Airport" Multiplicity="1" />
+          <End Role="FlightRouteOperated" Type="Self.FlightRouteOperated" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Company">
-              <PropertyRef Name="ID" />
+            <Principal Role="Airport">
+              <PropertyRef Name="IATA" />
             </Principal>
-            <Dependent Role="FlightRouteOwned">
-              <PropertyRef Name="OwnerCompany" />
+            <Dependent Role="FlightRouteOperated">
+              <PropertyRef Name="OriginAirport" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="CphAirportModelStoreContainer">
+          <EntitySet Name="Airline" EntityType="Self.Airline" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Airport" EntityType="Self.Airport" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FlightRouteOperated" EntityType="Self.FlightRouteOperated" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FlightRouteOwned" EntityType="Self.FlightRouteOwned" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__FlightRou__Airli__2A4B4B5E" Association="Self.FK__FlightRou__Airli__2A4B4B5E">
+            <End Role="Airline" EntitySet="Airline" />
+            <End Role="FlightRouteOwned" EntitySet="FlightRouteOwned" />
+          </AssociationSet>
           <AssociationSet Name="FK__FlightRou__DestA__29572725" Association="Self.FK__FlightRou__DestA__29572725">
             <End Role="Airport" EntitySet="Airport" />
             <End Role="FlightRouteOwned" EntitySet="FlightRouteOwned" />
           </AssociationSet>
-          <AssociationSet Name="FK__FlightRou__Opera__2B3F6F97" Association="Self.FK__FlightRou__Opera__2B3F6F97">
-            <End Role="Company" EntitySet="Company" />
-            <End Role="FlightRouteOwned" EntitySet="FlightRouteOwned" />
+          <AssociationSet Name="FK__FlightRou__DestA__30F848ED" Association="Self.FK__FlightRou__DestA__30F848ED">
+            <End Role="Airport" EntitySet="Airport" />
+            <End Role="FlightRouteOperated" EntitySet="FlightRouteOperated" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FlightRou__Opera__31EC6D26" Association="Self.FK__FlightRou__Opera__31EC6D26">
+            <End Role="Airline" EntitySet="Airline" />
+            <End Role="FlightRouteOperated" EntitySet="FlightRouteOperated" />
           </AssociationSet>
           <AssociationSet Name="FK__FlightRou__Origi__286302EC" Association="Self.FK__FlightRou__Origi__286302EC">
             <End Role="Airport" EntitySet="Airport" />
             <End Role="FlightRouteOwned" EntitySet="FlightRouteOwned" />
           </AssociationSet>
-          <AssociationSet Name="FK__FlightRou__Owner__2A4B4B5E" Association="Self.FK__FlightRou__Owner__2A4B4B5E">
-            <End Role="Company" EntitySet="Company" />
-            <End Role="FlightRouteOwned" EntitySet="FlightRouteOwned" />
+          <AssociationSet Name="FK__FlightRou__Origi__300424B4" Association="Self.FK__FlightRou__Origi__300424B4">
+            <End Role="Airport" EntitySet="Airport" />
+            <End Role="FlightRouteOperated" EntitySet="FlightRouteOperated" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -103,6 +144,14 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CphAirportModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Airline">
+          <Key>
+            <PropertyRef Name="AirlineName" />
+          </Key>
+          <Property Name="AirlineName" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="FlightRouteOwneds" Relationship="Self.FK__FlightRou__Airli__2A4B4B5E" FromRole="Airline" ToRole="FlightRouteOwned" />
+          <NavigationProperty Name="FlightRouteOperateds" Relationship="Self.FK__FlightRou__Opera__31EC6D26" FromRole="Airline" ToRole="FlightRouteOperated" />
+        </EntityType>
         <EntityType Name="Airport">
           <Key>
             <PropertyRef Name="IATA" />
@@ -110,33 +159,61 @@
           <Property Name="IATA" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="AirportName" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="FlightRouteOwneds" Relationship="Self.FK__FlightRou__DestA__29572725" FromRole="Airport" ToRole="FlightRouteOwned" />
+          <NavigationProperty Name="FlightRouteOperateds" Relationship="Self.FK__FlightRou__DestA__30F848ED" FromRole="Airport" ToRole="FlightRouteOperated" />
           <NavigationProperty Name="FlightRouteOwneds1" Relationship="Self.FK__FlightRou__Origi__286302EC" FromRole="Airport" ToRole="FlightRouteOwned" />
+          <NavigationProperty Name="FlightRouteOperateds1" Relationship="Self.FK__FlightRou__Origi__300424B4" FromRole="Airport" ToRole="FlightRouteOperated" />
         </EntityType>
-        <EntityType Name="Company">
+        <EntityType Name="FlightRouteOperated">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="OriginAirport" />
+            <PropertyRef Name="DestAirport" />
+            <PropertyRef Name="OperatedBy" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CompanyName" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="FlightRouteOwneds" Relationship="Self.FK__FlightRou__Opera__2B3F6F97" FromRole="Company" ToRole="FlightRouteOwned" />
-          <NavigationProperty Name="FlightRouteOwneds1" Relationship="Self.FK__FlightRou__Owner__2A4B4B5E" FromRole="Company" ToRole="FlightRouteOwned" />
+          <Property Name="OriginAirport" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="DestAirport" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="OperatedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Airline" Relationship="Self.FK__FlightRou__Opera__31EC6D26" FromRole="FlightRouteOperated" ToRole="Airline" />
+          <NavigationProperty Name="Airport" Relationship="Self.FK__FlightRou__DestA__30F848ED" FromRole="FlightRouteOperated" ToRole="Airport" />
+          <NavigationProperty Name="Airport1" Relationship="Self.FK__FlightRou__Origi__300424B4" FromRole="FlightRouteOperated" ToRole="Airport" />
         </EntityType>
         <EntityType Name="FlightRouteOwned">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="OriginAirport" />
+            <PropertyRef Name="DestAirport" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OriginAirport" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
-          <Property Name="DestAirport" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
-          <Property Name="OwnerCompany" Type="Int32" />
-          <Property Name="OperatedBy" Type="Int32" />
+          <Property Name="OriginAirport" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="DestAirport" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="AirlineOwner" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Airline" Relationship="Self.FK__FlightRou__Airli__2A4B4B5E" FromRole="FlightRouteOwned" ToRole="Airline" />
           <NavigationProperty Name="Airport" Relationship="Self.FK__FlightRou__DestA__29572725" FromRole="FlightRouteOwned" ToRole="Airport" />
           <NavigationProperty Name="Airport1" Relationship="Self.FK__FlightRou__Origi__286302EC" FromRole="FlightRouteOwned" ToRole="Airport" />
-          <NavigationProperty Name="Company" Relationship="Self.FK__FlightRou__Opera__2B3F6F97" FromRole="FlightRouteOwned" ToRole="Company" />
-          <NavigationProperty Name="Company1" Relationship="Self.FK__FlightRou__Owner__2A4B4B5E" FromRole="FlightRouteOwned" ToRole="Company" />
         </EntityType>
+        <Association Name="FK__FlightRou__Airli__2A4B4B5E">
+          <End Role="Airline" Type="Self.Airline" Multiplicity="0..1" />
+          <End Role="FlightRouteOwned" Type="Self.FlightRouteOwned" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Airline">
+              <PropertyRef Name="AirlineName" />
+            </Principal>
+            <Dependent Role="FlightRouteOwned">
+              <PropertyRef Name="AirlineOwner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FlightRou__Opera__31EC6D26">
+          <End Role="Airline" Type="Self.Airline" Multiplicity="1" />
+          <End Role="FlightRouteOperated" Type="Self.FlightRouteOperated" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Airline">
+              <PropertyRef Name="AirlineName" />
+            </Principal>
+            <Dependent Role="FlightRouteOperated">
+              <PropertyRef Name="OperatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__FlightRou__DestA__29572725">
-          <End Role="Airport" Type="Self.Airport" Multiplicity="0..1" />
+          <End Role="Airport" Type="Self.Airport" Multiplicity="1" />
           <End Role="FlightRouteOwned" Type="Self.FlightRouteOwned" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Airport">
@@ -147,8 +224,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__FlightRou__DestA__30F848ED">
+          <End Role="Airport" Type="Self.Airport" Multiplicity="1" />
+          <End Role="FlightRouteOperated" Type="Self.FlightRouteOperated" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Airport">
+              <PropertyRef Name="IATA" />
+            </Principal>
+            <Dependent Role="FlightRouteOperated">
+              <PropertyRef Name="DestAirport" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__FlightRou__Origi__286302EC">
-          <End Role="Airport" Type="Self.Airport" Multiplicity="0..1" />
+          <End Role="Airport" Type="Self.Airport" Multiplicity="1" />
           <End Role="FlightRouteOwned" Type="Self.FlightRouteOwned" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Airport">
@@ -159,49 +248,46 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FlightRou__Opera__2B3F6F97">
-          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
-          <End Role="FlightRouteOwned" Type="Self.FlightRouteOwned" Multiplicity="*" />
+        <Association Name="FK__FlightRou__Origi__300424B4">
+          <End Role="Airport" Type="Self.Airport" Multiplicity="1" />
+          <End Role="FlightRouteOperated" Type="Self.FlightRouteOperated" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Company">
-              <PropertyRef Name="ID" />
+            <Principal Role="Airport">
+              <PropertyRef Name="IATA" />
             </Principal>
-            <Dependent Role="FlightRouteOwned">
-              <PropertyRef Name="OperatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__FlightRou__Owner__2A4B4B5E">
-          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
-          <End Role="FlightRouteOwned" Type="Self.FlightRouteOwned" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Company">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="FlightRouteOwned">
-              <PropertyRef Name="OwnerCompany" />
+            <Dependent Role="FlightRouteOperated">
+              <PropertyRef Name="OriginAirport" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="CphAirportEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Airlines" EntityType="Self.Airline" />
           <EntitySet Name="Airports" EntityType="Self.Airport" />
-          <EntitySet Name="Companies" EntityType="Self.Company" />
+          <EntitySet Name="FlightRouteOperateds" EntityType="Self.FlightRouteOperated" />
           <EntitySet Name="FlightRouteOwneds" EntityType="Self.FlightRouteOwned" />
+          <AssociationSet Name="FK__FlightRou__Airli__2A4B4B5E" Association="Self.FK__FlightRou__Airli__2A4B4B5E">
+            <End Role="Airline" EntitySet="Airlines" />
+            <End Role="FlightRouteOwned" EntitySet="FlightRouteOwneds" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FlightRou__Opera__31EC6D26" Association="Self.FK__FlightRou__Opera__31EC6D26">
+            <End Role="Airline" EntitySet="Airlines" />
+            <End Role="FlightRouteOperated" EntitySet="FlightRouteOperateds" />
+          </AssociationSet>
           <AssociationSet Name="FK__FlightRou__DestA__29572725" Association="Self.FK__FlightRou__DestA__29572725">
             <End Role="Airport" EntitySet="Airports" />
             <End Role="FlightRouteOwned" EntitySet="FlightRouteOwneds" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FlightRou__DestA__30F848ED" Association="Self.FK__FlightRou__DestA__30F848ED">
+            <End Role="Airport" EntitySet="Airports" />
+            <End Role="FlightRouteOperated" EntitySet="FlightRouteOperateds" />
           </AssociationSet>
           <AssociationSet Name="FK__FlightRou__Origi__286302EC" Association="Self.FK__FlightRou__Origi__286302EC">
             <End Role="Airport" EntitySet="Airports" />
             <End Role="FlightRouteOwned" EntitySet="FlightRouteOwneds" />
           </AssociationSet>
-          <AssociationSet Name="FK__FlightRou__Opera__2B3F6F97" Association="Self.FK__FlightRou__Opera__2B3F6F97">
-            <End Role="Company" EntitySet="Companies" />
-            <End Role="FlightRouteOwned" EntitySet="FlightRouteOwneds" />
-          </AssociationSet>
-          <AssociationSet Name="FK__FlightRou__Owner__2A4B4B5E" Association="Self.FK__FlightRou__Owner__2A4B4B5E">
-            <End Role="Company" EntitySet="Companies" />
-            <End Role="FlightRouteOwned" EntitySet="FlightRouteOwneds" />
+          <AssociationSet Name="FK__FlightRou__Origi__300424B4" Association="Self.FK__FlightRou__Origi__300424B4">
+            <End Role="Airport" EntitySet="Airports" />
+            <End Role="FlightRouteOperated" EntitySet="FlightRouteOperateds" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -210,6 +296,13 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="CphAirportModelStoreContainer" CdmEntityContainer="CphAirportEntities">
+          <EntitySetMapping Name="Airlines">
+            <EntityTypeMapping TypeName="CphAirportModel.Airline">
+              <MappingFragment StoreEntitySet="Airline">
+                <ScalarProperty Name="AirlineName" ColumnName="AirlineName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Airports">
             <EntityTypeMapping TypeName="CphAirportModel.Airport">
               <MappingFragment StoreEntitySet="Airport">
@@ -218,22 +311,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Companies">
-            <EntityTypeMapping TypeName="CphAirportModel.Company">
-              <MappingFragment StoreEntitySet="Company">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+          <EntitySetMapping Name="FlightRouteOperateds">
+            <EntityTypeMapping TypeName="CphAirportModel.FlightRouteOperated">
+              <MappingFragment StoreEntitySet="FlightRouteOperated">
+                <ScalarProperty Name="OriginAirport" ColumnName="OriginAirport" />
+                <ScalarProperty Name="DestAirport" ColumnName="DestAirport" />
+                <ScalarProperty Name="OperatedBy" ColumnName="OperatedBy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="FlightRouteOwneds">
             <EntityTypeMapping TypeName="CphAirportModel.FlightRouteOwned">
               <MappingFragment StoreEntitySet="FlightRouteOwned">
-                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="OriginAirport" ColumnName="OriginAirport" />
                 <ScalarProperty Name="DestAirport" ColumnName="DestAirport" />
-                <ScalarProperty Name="OwnerCompany" ColumnName="OwnerCompany" />
-                <ScalarProperty Name="OperatedBy" ColumnName="OperatedBy" />
+                <ScalarProperty Name="AirlineOwner" ColumnName="AirlineOwner" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

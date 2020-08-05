@@ -4,14 +4,17 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a1ccda34f04f477192515f1076dbee52" Name="Diagram1">
-        <EntityTypeShape EntityType="CphAirportModel.Airport" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CphAirportModel.Company" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CphAirportModel.FlightRouteOwned" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+      <Diagram DiagramId="5600c65d5f644d368328f00791ef9387" Name="Diagram1">
+        <EntityTypeShape EntityType="CphAirportModel.Airline" Width="1.5" PointX="3" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CphAirportModel.Airport" Width="1.5" PointX="6.125" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CphAirportModel.FlightRouteOperated" Width="1.5" PointX="5.875" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CphAirportModel.FlightRouteOwned" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="CphAirportModel.FK__FlightRou__Airli__2A4B4B5E" ManuallyRouted="false" />
+        <AssociationConnector Association="CphAirportModel.FK__FlightRou__Opera__31EC6D26" ManuallyRouted="false" />
         <AssociationConnector Association="CphAirportModel.FK__FlightRou__DestA__29572725" ManuallyRouted="false" />
+        <AssociationConnector Association="CphAirportModel.FK__FlightRou__DestA__30F848ED" ManuallyRouted="false" />
         <AssociationConnector Association="CphAirportModel.FK__FlightRou__Origi__286302EC" ManuallyRouted="false" />
-        <AssociationConnector Association="CphAirportModel.FK__FlightRou__Opera__2B3F6F97" ManuallyRouted="false" />
-        <AssociationConnector Association="CphAirportModel.FK__FlightRou__Owner__2A4B4B5E" ManuallyRouted="false" />
+        <AssociationConnector Association="CphAirportModel.FK__FlightRou__Origi__300424B4" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

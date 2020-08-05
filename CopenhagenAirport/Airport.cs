@@ -18,10 +18,10 @@ namespace CopenhagenAirport
         public Airport()
         {
             this.FlightRouteOwneds = new HashSet<FlightRouteOwned>();
+            this.FlightRouteOperateds = new HashSet<FlightRouteOperated>();
             this.FlightRouteOwneds1 = new HashSet<FlightRouteOwned>();
+            this.FlightRouteOperateds1 = new HashSet<FlightRouteOperated>();
         }
-
-        
     
         public string IATA { get; set; }
         public string AirportName { get; set; }
@@ -29,6 +29,10 @@ namespace CopenhagenAirport
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FlightRouteOwned> FlightRouteOwneds { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FlightRouteOperated> FlightRouteOperateds { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FlightRouteOwned> FlightRouteOwneds1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FlightRouteOperated> FlightRouteOperateds1 { get; set; }
     }
 }

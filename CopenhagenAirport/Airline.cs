@@ -12,21 +12,20 @@ namespace CopenhagenAirport
     using System;
     using System.Collections.Generic;
     
-    public partial class Company
+    public partial class Airline
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Company()
+        public Airline()
         {
             this.FlightRouteOwneds = new HashSet<FlightRouteOwned>();
-            this.FlightRouteOwneds1 = new HashSet<FlightRouteOwned>();
+            this.FlightRouteOperateds = new HashSet<FlightRouteOperated>();
         }
     
-        public int ID { get; set; }
-        public string CompanyName { get; set; }
+        public string AirlineName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FlightRouteOwned> FlightRouteOwneds { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FlightRouteOwned> FlightRouteOwneds1 { get; set; }
+        public virtual ICollection<FlightRouteOperated> FlightRouteOperateds { get; set; }
     }
 }
