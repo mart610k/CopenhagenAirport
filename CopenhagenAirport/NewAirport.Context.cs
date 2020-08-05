@@ -27,7 +27,7 @@ namespace CopenhagenAirport
     
         public virtual DbSet<Airline> Airlines { get; set; }
         public virtual DbSet<Airport> Airports { get; set; }
-        public virtual DbSet<FlightRouteOperated> FlightRouteOperateds { get; set; }
-        public virtual DbSet<FlightRouteOwned> FlightRouteOwneds { get; set; }
+        public virtual DbSet<FlightOwner> FlightOwners { get; set; }
+        public virtual DbSet<FlightRoute> FlightRoutes { get; set; }
     }
 }

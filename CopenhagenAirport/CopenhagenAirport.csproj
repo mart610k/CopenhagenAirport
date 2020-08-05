@@ -68,44 +68,44 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Airline.cs">
-      <DependentUpon>AirportModel.tt</DependentUpon>
+      <DependentUpon>NewAirport.tt</DependentUpon>
     </Compile>
     <Compile Include="Airport.cs">
-      <DependentUpon>AirportModel.tt</DependentUpon>
+      <DependentUpon>NewAirport.tt</DependentUpon>
     </Compile>
-    <Compile Include="AirportModel.Context.cs">
+    <Compile Include="FlightOwner.cs">
+      <DependentUpon>NewAirport.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FlightRoute.cs">
+      <DependentUpon>NewAirport.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NewAirport.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AirportModel.Context.tt</DependentUpon>
+      <DependentUpon>NewAirport.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="AirportModel.cs">
+    <Compile Include="NewAirport.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AirportModel.tt</DependentUpon>
+      <DependentUpon>NewAirport.tt</DependentUpon>
     </Compile>
-    <Compile Include="AirportModel.Designer.cs">
+    <Compile Include="NewAirport.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AirportModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="FlightRouteOperated.cs">
-      <DependentUpon>AirportModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FlightRouteOwned.cs">
-      <DependentUpon>AirportModel.tt</DependentUpon>
+      <DependentUpon>NewAirport.edmx</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="AirportModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>AirportModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="AirportModel.edmx.diagram">
-      <DependentUpon>AirportModel.edmx</DependentUpon>
-    </None>
     <None Include="App.config" />
+    <EntityDeploy Include="NewAirport.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>NewAirport.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="NewAirport.edmx.diagram">
+      <DependentUpon>NewAirport.edmx</DependentUpon>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -124,15 +124,15 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AirportModel.Context.tt">
+    <Content Include="NewAirport.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AirportModel.edmx</DependentUpon>
-      <LastGenOutput>AirportModel.Context.cs</LastGenOutput>
+      <DependentUpon>NewAirport.edmx</DependentUpon>
+      <LastGenOutput>NewAirport.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="AirportModel.tt">
+    <Content Include="NewAirport.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AirportModel.edmx</DependentUpon>
-      <LastGenOutput>AirportModel.cs</LastGenOutput>
+      <DependentUpon>NewAirport.edmx</DependentUpon>
+      <LastGenOutput>NewAirport.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

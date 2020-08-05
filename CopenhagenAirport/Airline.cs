@@ -17,15 +17,15 @@ namespace CopenhagenAirport
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Airline()
         {
-            this.FlightRouteOwneds = new HashSet<FlightRouteOwned>();
-            this.FlightRouteOperateds = new HashSet<FlightRouteOperated>();
+            this.FlightOwners = new HashSet<FlightOwner>();
+            this.FlightRoutes = new HashSet<FlightRoute>();
         }
     
         public string AirlineName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FlightRouteOwned> FlightRouteOwneds { get; set; }
+        public virtual ICollection<FlightOwner> FlightOwners { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FlightRouteOperated> FlightRouteOperateds { get; set; }
+        public virtual ICollection<FlightRoute> FlightRoutes { get; set; }
     }
 }
